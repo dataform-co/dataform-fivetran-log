@@ -6,9 +6,8 @@ module.exports = (params) => {
 select
   destination_id,
   measured_month,
-  credits_consumed,
-  ${params.fivetranLogDatabase} as destination_databases
+  credits_consumed
 from
-  ${ctx.ref(params.fivetranSchema, "credits_used")}
+  ${ctx.ref(params.fivetranLogSchema, "credits_used")}
 `)
 }

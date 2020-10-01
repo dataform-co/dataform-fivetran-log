@@ -6,16 +6,16 @@ module.exports = (params) => {
 with api_calls as (
 select
   connector_name,
-  destination_database,
-  { { dbt_utils.date_trunc('day', 'created_at') } } as date,
+  /* TODO: Make not BQ specific */
+  date(timestamp_trunc(created_at, DAY)) as date,
   count(*) as number_of_api_calls
 from
-  ${ctx.ref(params.fivetranSchema, "fivetran_log_log")}
+  ${ctx.ref(params.defaultConfig.schema, "fivetran_log_log")}
 where
   event_subtype = 'api_call'
   and connector_name is not null
 group by
-  1,2,3
+  1,2
 ),
 
 connector_api_calls as (
@@ -29,19 +29,18 @@ select
   connector.destination_id,
   connector.set_up_at
 from
-  ${ctx.ref(params.fivetranSchema, "fivetran_log_connector")} as connector
+  ${ctx.ref(params.defaultConfig.schema, "fivetran_log_connector_status")} as connector
   left join api_calls on api_calls.connector_name = connector.connector_name
-  and api_calls.destination_database = connector.destination_database
 ),
 
--- TODO: Make this not just BigQuery specific
-with dates as (
+/* TODO: Make this not just BigQuery specific */
+dates as (
   select
     *
   from
     unnest(
 generate_date_array(
-  date(${params.fivetranLogFirstDate}),
+  date("${params.fivetranLogFirstDate}"),
   date_add(current_date(), interval 1 week),
   interval 1 day
 )
@@ -57,7 +56,7 @@ select
   connector_api_calls.destination_name,
   connector_api_calls.destination_id,
   max(case 
-        when cast(dates.date as timestamp) = connector_api_calls.date then connector_api_calls.number_of_api_calls
+        when dates.date = connector_api_calls.date then connector_api_calls.number_of_api_calls
         else 0
        end) as number_of_api_calls
 from
@@ -68,7 +67,7 @@ group by
   1,2,3,4,5,6
 ),
 
--- now rejoin dates to get a complete calendar
+/* now rejoin dates to get a complete calendar */
 join_api_call_history as (
 select
   dates.date,
@@ -84,14 +83,14 @@ from
   on dates.date = connector_api_call_history.date
 group by 
   1,2,3,4,5,6,7
-),
+)
 
 select 
   *
 from 
   join_api_call_history
 where 
-  -- TODO: Make current_timestamp not bigquery specific
+  /* TODO: Make current_timestamp not bigquery specific */
   cast(date as timestamp) <= current_timestamp()
 order by 
   date desc

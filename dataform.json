@@ -1,6 +1,6 @@
 {
     "warehouse": "bigquery",
-    "defaultSchema": "dataform",
-    "assertionSchema": "dataform_assertions",
+    "defaultSchema": "fivetran_log_package",
+    "assertionSchema": "fivetran_log_package",
     "defaultDatabase": "dataform-corp"
 }

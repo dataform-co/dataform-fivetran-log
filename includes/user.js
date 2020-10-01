@@ -11,9 +11,8 @@ select
   family_name as last_name,
   given_name as first_name,
   phone,
-  verified as is_verified,
-  ${params.fivetranLogDatabase} as destination_databases
+  verified as is_verified
 from
-  ${ctx.ref(params.fivetranSchema, "user")}
+  ${ctx.ref(params.fivetranLogSchema, "user")}
 `)
 }

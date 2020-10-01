@@ -17,9 +17,8 @@ select
     when transformation_id is not null and message_data like '%has failed%' then 'transformation run failed'
     else message_event 
   end as event_subtype,
-  transformation_id,
-  ${params.fivetranLogDatabase} as destination_databases
+  transformation_id
 from
-  ${ctx.ref(params.fivetranSchema, "log")}
+  ${ctx.ref(params.fivetranLogSchema, "log")}
 `)
 }

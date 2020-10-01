@@ -8,9 +8,8 @@ select
   country,
   created_at,
   name as account_name,
-  status,
-  ${params.fivetranLogDatabase} as destination_databases
+  status
 from
-  ${ctx.ref(params.fivetranSchema, "account")}
+  ${ctx.ref(params.fivetranLogSchema, "account")}
 `)
 }

@@ -8,9 +8,8 @@ select
   account_id,
   created_at,
   name as destination_name,
-  region,
-  ${params.fivetranLogDatabase} as destination_databases
+  region
 from
-  ${ctx.ref(params.fivetranSchema, "destination")}
+  ${ctx.ref(params.fivetranLogSchema, "destination")}
 `)
 }

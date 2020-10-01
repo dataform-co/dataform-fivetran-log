@@ -10,9 +10,8 @@ select
    measured_at,
    monthly_active_rows,
    schema_name,
-   table_name,
-  ${params.fivetranLogDatabase} as destination_databases
+   table_name
 from
-  ${ctx.ref(params.fivetranSchema, "active_volume")}
+  ${ctx.ref(params.fivetranLogSchema, "active_volume")}
 `)
 }
