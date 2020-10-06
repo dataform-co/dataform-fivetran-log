@@ -19,8 +19,8 @@ group by
 )
 
 select
-  api_calls.date,
-  api_calls.number_of_api_calls,
+  daily_api_calls.date,
+  daily_api_calls.number_of_api_calls,
   connector_status.connector_name,
   connector_status.connector_id,
   connector_status.connector_type,
@@ -32,6 +32,6 @@ from
   left join daily_api_calls on daily_api_calls.connector_name = connector_status.connector_name
 where 
   /* TODO: Make current_timestamp not bigquery specific */
-  cast(api_calls.date as timestamp) <= current_timestamp()
+  cast(daily_api_calls.date as timestamp) <= current_timestamp()
 `)
 }
