@@ -27,7 +27,7 @@ The package's main goals are to:
 
 ## Installation
 
-Add the package to your `package.json` file in your Dataform project. You can find the most up to package version on the [releases page](https://github.com/dataform-co/dataform-fivetran_log/releases).
+Add the package to your `package.json` file in your Dataform project. You can find the most up to package version on the [releases page](https://github.com/dataform-co/dataform-fivetran-log/releases).
 
 ## Configure the package
 
