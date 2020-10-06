@@ -17,7 +17,6 @@ module.exports = (params) => {
 
   params = {
     // set defaults for parameters
-    fivetranLogFirstDate: "2016-01-01",
     fivetranLogSchema: "fivetran_log",
 
     ...params

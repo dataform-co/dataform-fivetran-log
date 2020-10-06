@@ -3,7 +3,7 @@ module.exports = (params) => {
   return publish("fivetran_log_connector_daily_api_calls", {
     ...params.defaultConfig
   }).query(ctx => `
-with api_calls as (
+with daily_api_calls as (
 select
   connector_name,
   /* TODO: Make not BQ specific */
@@ -16,83 +16,22 @@ where
   and connector_name is not null
 group by
   1,2
-),
+)
 
-connector_api_calls as (
 select
   api_calls.date,
   api_calls.number_of_api_calls,
-  connector.connector_name,
-  connector.connector_id,
-  connector.connector_type,
-  connector.destination_name,
-  connector.destination_id,
-  connector.set_up_at
+  connector_status.connector_name,
+  connector_status.connector_id,
+  connector_status.connector_type,
+  connector_status.destination_name,
+  connector_status.destination_id,
+  connector_status.set_up_at
 from
-  ${ctx.ref(params.defaultConfig.schema, "fivetran_log_connector_status")} as connector
-  left join api_calls on api_calls.connector_name = connector.connector_name
-),
-
-/* TODO: Make this not just BigQuery specific */
-dates as (
-  select
-    *
-  from
-    unnest(
-generate_date_array(
-  date("${params.fivetranLogFirstDate}"),
-  date_add(current_date(), interval 1 week),
-  interval 1 day
-)
-    ) as date
-),
-
-connector_api_call_history as (
-select
-  dates.date,
-  connector_api_calls.connector_name,
-  connector_api_calls.connector_id,
-  connector_api_calls.connector_type,
-  connector_api_calls.destination_name,
-  connector_api_calls.destination_id,
-  max(case 
-        when dates.date = connector_api_calls.date then connector_api_calls.number_of_api_calls
-        else 0
-       end) as number_of_api_calls
-from
-  dates 
-    join connector_api_calls 
-    on cast(dates.date as timestamp) >= connector_api_calls.set_up_at
-group by
-  1,2,3,4,5,6
-),
-
-/* now rejoin dates to get a complete calendar */
-join_api_call_history as (
-select
-  dates.date,
-  connector_api_call_history.connector_name,
-  connector_api_call_history.connector_id,
-  connector_api_call_history.connector_type,
-  connector_api_call_history.destination_name,
-  connector_api_call_history.destination_id,
-  connector_api_call_history.number_of_api_calls
-from
-  dates
-  left join connector_api_call_history
-  on dates.date = connector_api_call_history.date
-group by 
-  1,2,3,4,5,6,7
-)
-
-select 
-  *
-from 
-  join_api_call_history
+  ${ctx.ref(params.defaultConfig.schema, "fivetran_log_connector_status")} as connector_status
+  left join daily_api_calls on daily_api_calls.connector_name = connector_status.connector_name
 where 
   /* TODO: Make current_timestamp not bigquery specific */
-  cast(date as timestamp) <= current_timestamp()
-order by 
-  date desc
+  cast(api_calls.date as timestamp) <= current_timestamp()
 `)
 }

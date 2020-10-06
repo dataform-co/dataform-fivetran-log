@@ -2,7 +2,6 @@
 const fivetran_logs = require("../");
 
 const models = fivetran_logs({
-  // TODO: rename to fivetranLogSchema
   fivetranLogSchema: "fivetran_log",
   defaultConfig: {
     schema: "fivetran_log_package",

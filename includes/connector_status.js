@@ -18,7 +18,7 @@ where
 schema_changes as (
 select
   connector_name,
-  count(*) as number_of_schema_changes_last_month
+  count(*) as number_of_schema_changes_last_30d
 from
   ${ctx.ref(params.defaultConfig.schema, "fivetran_log_log")}
 where
@@ -131,9 +131,9 @@ select
   connector_recent_logs.last_synced_at,
   connector_recent_logs.set_up_at,
   coalesce(
-    schema_changes.number_of_schema_changes_last_month,
+    schema_changes.number_of_schema_changes_last_30d,
     0
-  ) as number_of_schema_changes_last_month,
+  ) as number_of_schema_changes_last_30d,
   /* TODO: make general warehouse */
   string_agg(case when connector_recent_logs.event_type = 'SEVERE' then connector_recent_logs.message_data else null end, "\\n") as errors_since_last_completed_sync,
   /* TODO: make general warehouse */
