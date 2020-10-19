@@ -32,48 +32,56 @@ module.exports = (params) => {
 
   account_membership = declare({
     ...params.defaultConfig,
+    database: params.fivetranLogDatabase,
     schema: params.fivetranLogSchema,
     name: "account_membership"
   });
 
   active_volume = declare({
     ...params.defaultConfig,
+    database: params.fivetranLogDatabase,
     schema: params.fivetranLogSchema,
     name: "active_volume"
   });
 
   connector = declare({
     ...params.defaultConfig,
+    database: params.fivetranLogDatabase,
     schema: params.fivetranLogSchema,
     name: "connector"
   });
 
   credits_used = declare({
     ...params.defaultConfig,
+    database: params.fivetranLogDatabase,
     schema: params.fivetranLogSchema,
     name: "credits_used"
   });
 
   destination = declare({
     ...params.defaultConfig,
+    database: params.fivetranLogDatabase,
     schema: params.fivetranLogSchema,
     name: "destination"
   });
 
   destination_membership = declare({
     ...params.defaultConfig,
+    database: params.fivetranLogDatabase,
     schema: params.fivetranLogSchema,
     name: "destination_membership"
   });
 
   log = declare({
     ...params.defaultConfig,
+    database: params.fivetranLogDatabase,
     schema: params.fivetranLogSchema,
     name: "log"
   });
 
   user = declare({
     ...params.defaultConfig,
+    database: params.fivetranLogDatabase,
     schema: params.fivetranLogSchema,
     name: "user"
   });
