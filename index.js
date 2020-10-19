@@ -26,6 +26,7 @@ module.exports = (params) => {
 
   account = declare({
     ...params.defaultConfig,
+    database: params.fivetranLogDatabase,
     schema: params.fivetranLogSchema,
     name: "account"
   });
