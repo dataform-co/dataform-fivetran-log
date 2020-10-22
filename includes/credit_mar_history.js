@@ -24,7 +24,7 @@ select
   cast(concat(measured_month, '-01') as date) as measured_month
   -- match date format to join with MAR table
 from
-  ${ctx.ref(params.defaultConfig.schema, "fivetran_log_credits_used")}
+  ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "fivetran_log_credits_used")}
 )
 
 select

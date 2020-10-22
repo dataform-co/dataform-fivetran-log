@@ -9,7 +9,7 @@ select
   *,
   timestamp_trunc(measured_at, month) as measured_month
 from
-  ${ctx.ref(params.defaultConfig.schema, "fivetran_log_active_volume")}
+  ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "fivetran_log_active_volume")}
 where
   schema_name != 'fivetran_log'
   -- it's free!
@@ -58,8 +58,8 @@ select
   destination.destination_name
 from
   latest_mar
-  join ${ctx.ref(params.defaultConfig.schema, "fivetran_log_connector")} as connector on latest_mar.connector_name = connector.connector_name
+  join ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "fivetran_log_connector")} as connector on latest_mar.connector_name = connector.connector_name
   and latest_mar.destination_id = connector.destination_id
-  join ${ctx.ref(params.defaultConfig.schema, "fivetran_log_destination")} as destination on latest_mar.destination_id = destination.destination_id
+  join ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "fivetran_log_destination")} as destination on latest_mar.destination_id = destination.destination_id
 `)
 }

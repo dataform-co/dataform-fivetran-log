@@ -7,7 +7,7 @@ with connector_log as (
 select
   *
 from
-  ${ctx.ref(params.defaultConfig.schema, "fivetran_log_log")}
+  ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "fivetran_log_log")}
   -- only looking at errors, warnings, and syncs here
 where
   event_type = 'SEVERE'
@@ -20,7 +20,7 @@ select
   connector_name,
   count(*) as number_of_schema_changes_last_30d
 from
-  ${ctx.ref(params.defaultConfig.schema, "fivetran_log_log")}
+  ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "fivetran_log_log")}
 where
   timestamp_diff(current_timestamp(), created_at, DAY) <= 30
   and event_subtype in (
@@ -66,7 +66,7 @@ select
     end
   ) as last_warning_at
 from
-  ${ctx.ref(params.defaultConfig.schema, "fivetran_log_connector")} as connector
+  ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "fivetran_log_connector")} as connector
   left join connector_log on connector.connector_name = connector_log.connector_name
 group by
   1,2,3,4,5,6
@@ -141,7 +141,7 @@ select
 from
   connector_recent_logs
   left join schema_changes on connector_recent_logs.connector_name = schema_changes.connector_name
-  join ${ctx.ref(params.defaultConfig.schema, "fivetran_log_destination")} as destination on destination.destination_id = connector_recent_logs.destination_id
+  join ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "fivetran_log_destination")} as destination on destination.destination_id = connector_recent_logs.destination_id
 group by
   1,2,3,4,5,6,7,8,9,10
 

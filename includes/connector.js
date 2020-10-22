@@ -1,7 +1,10 @@
 module.exports = (params) => {
 
-  return publish("fivetran_log_connector", {
-    ...params.defaultConfig
+  return publish(params.stagingTablePrefix + "fivetran_log_connector", {
+    ...params.defaultConfig,
+    assertions: {
+      uniqueKey: ["connector_name"]
+    }
   }).query(ctx => `
 with all_connectors as (
 select

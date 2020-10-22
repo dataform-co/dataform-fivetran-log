@@ -18,7 +18,7 @@ module.exports = (params) => {
   params = {
     // set defaults for parameters
     fivetranLogSchema: "fivetran_log",
-
+    stagingTablePrefix: "stg_",
     ...params
   };
 
