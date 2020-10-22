@@ -7,7 +7,7 @@ with daily_api_calls as (
 select
   connector_name,
   /* TODO: Make not BQ specific */
-  date(timestamp_trunc(created_at, DAY)) as date,
+  timestamp_trunc(cast(created_at as timestamp), DAY) as date,
   count(*) as number_of_api_calls
 from
   ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "fivetran_log_log")}
