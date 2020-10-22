@@ -1,7 +1,11 @@
 module.exports = (params) => {
 
   return publish(params.stagingTablePrefix + "fivetran_log_account", {
-    ...params.defaultConfig
+    ...params.defaultConfig,
+    assertions: {
+      uniqueKey: ["account_id"],
+      nonNull: ["account_id"]
+    }
   }).query(ctx => `
 select
   id as account_id,

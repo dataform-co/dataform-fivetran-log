@@ -2,5 +2,5 @@
     "warehouse": "bigquery",
     "defaultSchema": "fivetran_log_package",
     "assertionSchema": "fivetran_log_package",
-    "defaultDatabase": "dataform-corp"
+    "defaultDatabase": "dataform-corp-dev"
 }
