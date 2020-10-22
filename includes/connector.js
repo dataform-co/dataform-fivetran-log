@@ -1,6 +1,6 @@
 module.exports = (params) => {
 
-  return publish("fivetran_log_connector", {
+  return publish(params.stagingTablePrefix + "fivetran_log_connector", {
     ...params.defaultConfig
   }).query(ctx => `
 with all_connectors as (

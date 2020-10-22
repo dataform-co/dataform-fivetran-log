@@ -10,7 +10,7 @@ select
   date(timestamp_trunc(created_at, DAY)) as date,
   count(*) as number_of_api_calls
 from
-  ${ctx.ref(params.defaultConfig.schema, "fivetran_log_log")}
+  ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "fivetran_log_log")}
 where
   event_subtype = 'api_call'
   and connector_name is not null

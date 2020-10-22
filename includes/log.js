@@ -1,6 +1,6 @@
 module.exports = (params) => {
 
-  return publish("fivetran_log_log", {
+  return publish(params.stagingTablePrefix + "fivetran_log_log", {
     ...params.defaultConfig
   }).query(ctx => `
 select
