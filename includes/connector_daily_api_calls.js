@@ -1,3 +1,5 @@
+const sql = require("@dataform/sql")();
+
 module.exports = (params) => {
 
   return publish("fivetran_log_connector_daily_api_calls", {
@@ -6,8 +8,7 @@ module.exports = (params) => {
 with daily_api_calls as (
 select
   connector_name,
-  /* TODO: Make not BQ specific */
-  timestamp_trunc(cast(created_at as timestamp), DAY) as date,
+  ${sql.timestamps.truncate(sql.asTimestamp("created_at"), "day")} as date,
   count(*) as number_of_api_calls
 from
   ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "fivetran_log_log")}
@@ -31,7 +32,6 @@ from
   ${ctx.ref(params.defaultConfig.schema, "fivetran_log_connector_status")} as connector_status
   left join daily_api_calls on daily_api_calls.connector_name = connector_status.connector_name
 where 
-  /* TODO: Make current_timestamp not bigquery specific */
-  cast(daily_api_calls.date as timestamp) <= current_timestamp()
+  ${sql.asTimestamp("daily_api_calls.date")} <= ${sql.timestamps.currentUTC()}
 `)
 }

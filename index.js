@@ -1,4 +1,3 @@
-// TODO: import files from includes
 const fivetranLogAccount = require("./includes/account");
 const fivetranLogAccountMembership = require("./includes/account_membership");
 const fivetranLogActiveVolume = require("./includes/active_volume");
@@ -89,7 +88,6 @@ module.exports = (params) => {
 
   // Publish and return datasets.
   let result = {
-    // TODO: update files to call with params
     account: fivetranLogAccount(params),
     account_membership: fivetranLogAccountMembership(params),
     active_volume: fivetranLogActiveVolume(params),

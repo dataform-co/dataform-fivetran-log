@@ -1,3 +1,5 @@
+const sql = require("@dataform/sql")();
+
 module.exports = (params) => {
 
   return publish("fivetran_log_mar_table_history", {
@@ -7,7 +9,7 @@ with
 active_volume as (
 select
   *,
-  timestamp_trunc(measured_at, month) as measured_month
+  ${sql.timestamps.truncate(sql.asTimestamp("measured_at"), "month")} as measured_month
 from
   ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "fivetran_log_active_volume")}
 where

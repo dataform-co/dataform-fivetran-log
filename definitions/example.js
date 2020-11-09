@@ -1,4 +1,3 @@
-// TODO: update package name
 const fivetran_logs = require("../");
 
 const models = fivetran_logs({
