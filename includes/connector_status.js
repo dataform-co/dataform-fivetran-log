@@ -1,6 +1,5 @@
 const sql = require("@dataform/sql")();
 
-
 module.exports = (params) => {
 
   return publish("fivetran_log_connector_status", {
@@ -137,10 +136,8 @@ select
     schema_changes.number_of_schema_changes_last_30d,
     0
   ) as number_of_schema_changes_last_30d,
-  /* TODO: make general warehouse */
-  string_agg(case when connector_recent_logs.event_type = 'SEVERE' then connector_recent_logs.message_data else null end, "\\n") as errors_since_last_completed_sync,
-  /* TODO: make general warehouse */
-  string_agg(case when connector_recent_logs.event_type = 'WARNING' then connector_recent_logs.message_data else null end, "\\n") as warnings_since_last_completed_sync
+  ${sql.stringAgg("case when connector_recent_logs.event_type = 'SEVERE' then connector_recent_logs.message_data else null end", "\\n")} as errors_since_last_completed_sync,
+  ${sql.stringAgg("case when connector_recent_logs.event_type = 'WARNING' then connector_recent_logs.message_data else null end", "\\n")} as warnings_since_last_completed_sync
 from
   connector_recent_logs
   left join schema_changes on connector_recent_logs.connector_name = schema_changes.connector_name
