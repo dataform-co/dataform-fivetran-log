@@ -49,9 +49,11 @@ fivetranLog({
 });
 ```
 
-## Not supported:
+## Features not supported:
  - transformations
  - multiple destination databases
 
 ## Supported warehouses:
  - BigQuery
+ - Snowflake
+ - Redshift
