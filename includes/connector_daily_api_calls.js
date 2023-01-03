@@ -1,7 +1,7 @@
 const sql = require("./sql")
 
 module.exports = (params) => {
-  
+
   return publish("fivetran_log_connector_daily_api_calls", {
     ...params.defaultConfig
   }).query(ctx => `
