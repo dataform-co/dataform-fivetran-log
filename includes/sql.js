@@ -9,7 +9,7 @@ const getDialect = () => {
     postgres: "postgres",
     snowflake: "snowflake",
     sqldatawarehouse: "mssql",
-  };
+  }[dataformWarehouse];
 };
 
 const asTimestamp = (castableToTimestamp) => {
@@ -25,27 +25,30 @@ const timestampDiff = (datePart, start, end) => {
 };
 
 const timestampTruncate = (timestamp, timestampUnit) => {
-  if (this.dialect === "snowflake") {
+  const dialect = getDialect();
+  if (dialect === "snowflake") {
     return `date_trunc(${timestampUnit}, ${timestamp})`;
   }
-  if (this.dialect === "redshift") {
+  if (dialect === "redshift") {
     return `date_trunc('${timestampUnit}', ${timestamp})`;
   }
   return `timestamp_trunc(${timestamp}, ${timestampUnit})`;
 };
 
 const currentUTC = () => {
-  if (this.dialect === "redshift") {
+  const dialect = getDialect();
+  if (dialect === "redshift") {
     return "current_timestamp::timestamp";
   }
-  if (this.dialect === "snowflake") {
+  if (dialect === "snowflake") {
     return "convert_timezone('UTC', current_timestamp())::timestamp";
   }
   return "current_timestamp()";
 };
 
 function stringAgg(field, delimiter = ",") {
-  if (this.dialect === "snowflake" || this.dialect === "redshift") {
+  const dialect = getDialect();
+  if (dialect === "snowflake" || dialect === "redshift") {
     return `listagg(${field}, '${delimiter}')`;
   }
   return `string_agg(${field}, '${delimiter}')`;
