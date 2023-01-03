@@ -1,14 +1,14 @@
-const sql = require("@dataform/sql")();
+const sql = require("./sql")
 
 module.exports = (params) => {
-
+  
   return publish("fivetran_log_connector_daily_api_calls", {
     ...params.defaultConfig
   }).query(ctx => `
 with daily_api_calls as (
 select
   connector_name,
-  ${sql.timestamps.truncate(sql.asTimestamp("created_at"), "day")} as date,
+  ${sql.timestampTruncate(sql.asTimestamp("created_at"), "day")} as date,
   count(*) as number_of_api_calls
 from
   ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "fivetran_log_log")}
@@ -32,6 +32,6 @@ from
   ${ctx.ref(params.defaultConfig.schema, "fivetran_log_connector_status")} as connector_status
   left join daily_api_calls on daily_api_calls.connector_name = connector_status.connector_name
 where 
-  ${sql.asTimestamp("daily_api_calls.date")} <= ${sql.timestamps.currentUTC()}
+  ${sql.asTimestamp("daily_api_calls.date")} <= ${sql.currentUTC()}
 `)
 }

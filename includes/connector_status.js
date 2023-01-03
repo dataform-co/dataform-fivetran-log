@@ -1,4 +1,4 @@
-const sql = require("@dataform/sql")();
+const sql = require("./sql")
 
 module.exports = (params) => {
 
@@ -24,7 +24,7 @@ select
 from
   ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "fivetran_log_log")}
 where
-  ${sql.timestamps.diff("day", sql.timestamps.currentUTC(), "created_at")} <= 30
+  ${sql.timestampDiff("day", sql.currentUTC(), "created_at")} <= 30
   and event_subtype in (
     'create_table',
     'alter_table',
