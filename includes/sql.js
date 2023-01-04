@@ -46,13 +46,13 @@ const currentUTC = () => {
   return "current_timestamp()";
 };
 
-function stringAgg(field, delimiter = ",") {
+const stringAgg = (field, delimiter = ",") => {
   const dialect = getDialect();
   if (dialect === "snowflake" || dialect === "redshift") {
     return `listagg(${field}, '${delimiter}')`;
   }
   return `string_agg(${field}, '${delimiter}')`;
-}
+};
 
 module.exports = {
   asTimestamp,
